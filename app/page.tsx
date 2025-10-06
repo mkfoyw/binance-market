@@ -109,6 +109,7 @@ const TIME_PERIODS = {
   "3600": { label: "1小时", description: "1小时内变化", minutes: 60 },
   "7200": { label: "2小时", description: "2小时内变化", minutes: 120 },
   "14400": { label: "4小时", description: "4小时内变化", minutes: 240 },
+  "43200": { label: "12小时", description: "12小时内变化", minutes: 720 },
   "86400": { label: "24小时", description: "24小时内变化", minutes: 1440 },
 } as const;
 
@@ -159,7 +160,7 @@ function RankingCard({
   const colorClass = isPositive ? "text-green-600" : "text-red-600";
   const bgColorClass = isPositive ? "bg-green-50 dark:bg-green-950" : "bg-red-50 dark:bg-red-950";
   
-  const displayLimit = showExpanded ? 20 : 5;
+  const displayLimit = showExpanded ? 50 : 5;
   const displayItems = items.slice(0, displayLimit);
 
   return (
