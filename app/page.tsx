@@ -609,8 +609,8 @@ export default function BinanceAnalysisPage() {
       {/* 页面标题 */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">币安行情分析</h1>
-          <p className="text-muted-foreground">实时展示币安交易所不同时间段的涨跌幅排行榜</p>
+          <h1 className="text-3xl font-bold tracking-tight">币安合约行情分析</h1>
+          <p className="text-muted-foreground">实时展示币安交易所合约不同时间段的涨跌幅排行榜</p>
         </div>
         {binancePrices?.data?.[0] && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground md:w-auto w-full">
