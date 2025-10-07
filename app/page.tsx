@@ -5,8 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { LoadingState } from "@/components/ui/loading-state";
-import { TrendingUp, TrendingDown, Activity, Clock, RefreshCw, MoreHorizontal, ExternalLink } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TrendingUp, TrendingDown, Activity, Clock, RefreshCw, MoreHorizontal, ExternalLink, Loader2 } from "lucide-react";
 import { useGetPricesBySourceQuery } from "@/lib/services/crypto-price-tracker";
 import { PriceDataDetail, TokenMetadata } from "@/lib/types/crypto";
 import { format } from "date-fns";
@@ -28,6 +28,133 @@ const getCoinGeckoUrl = (id: string) => {
 const getTradingUrl = (source: string, baseSymbol: string, quoteSymbol: string) => {
   return `https://www.binance.com/zh-CN/futures/${baseSymbol}${quoteSymbol}`;
 };
+
+// 加载状态组件
+function LoadingState({ message = "加载中..." }: { message?: string }) {
+  return (
+    <div className="container mx-auto py-8 px-4 space-y-6">
+      {/* 页面标题骨架 */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="space-y-2">
+          <Skeleton className="h-9 w-64" />
+          <Skeleton className="h-5 w-96" />
+        </div>
+        <Skeleton className="h-5 w-48" />
+      </div>
+
+      {/* 统计卡片骨架 */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[1, 2, 3, 4].map((i) => (
+          <Card key={i} className="animate-pulse">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-4" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-8 w-16 mb-2" />
+              <Skeleton className="h-3 w-32" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* 时间筛选按钮骨架 */}
+      <div className="bg-background/95 backdrop-blur py-4 -mx-4 px-4 border-b">
+        <div className="flex flex-wrap justify-center gap-2">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            <Skeleton key={i} className="h-8 w-20" />
+          ))}
+        </div>
+      </div>
+
+      {/* 排行榜卡片骨架 */}
+      <div className="space-y-8">
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* 涨幅榜骨架 */}
+          <Card className="bg-green-50 dark:bg-green-950 border-l-4 border-l-green-500 animate-pulse">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-5 w-5" />
+                  <Skeleton className="h-6 w-24" />
+                </div>
+                <Skeleton className="h-5 w-16" />
+              </div>
+              <Skeleton className="h-4 w-48 mt-2" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {/* 表头 */}
+                <div className="flex items-center px-3 pb-2 border-b">
+                  <Skeleton className="h-3 w-12" />
+                  <Skeleton className="h-3 w-12 mx-auto" />
+                  <Skeleton className="h-3 w-12 ml-auto" />
+                </div>
+                {/* 数据行 */}
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="flex items-center p-3 rounded-md bg-white/50 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 w-32">
+                      <Skeleton className="w-8 h-8 rounded-full" />
+                      <Skeleton className="h-5 w-16" />
+                    </div>
+                    <Skeleton className="h-6 w-20 mx-auto" />
+                    <Skeleton className="h-6 w-16 ml-auto" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 跌幅榜骨架 */}
+          <Card className="bg-red-50 dark:bg-red-950 border-l-4 border-l-red-500 animate-pulse">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-5 w-5" />
+                  <Skeleton className="h-6 w-24" />
+                </div>
+                <Skeleton className="h-5 w-16" />
+              </div>
+              <Skeleton className="h-4 w-48 mt-2" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {/* 表头 */}
+                <div className="flex items-center px-3 pb-2 border-b">
+                  <Skeleton className="h-3 w-12" />
+                  <Skeleton className="h-3 w-12 mx-auto" />
+                  <Skeleton className="h-3 w-12 ml-auto" />
+                </div>
+                {/* 数据行 */}
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="flex items-center p-3 rounded-md bg-white/50 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-3 w-32">
+                      <Skeleton className="w-8 h-8 rounded-full" />
+                      <Skeleton className="h-5 w-16" />
+                    </div>
+                    <Skeleton className="h-6 w-20 mx-auto" />
+                    <Skeleton className="h-6 w-16 ml-auto" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* 加载指示器 - 浮动在右下角 */}
+      <div className="fixed bottom-8 right-8 flex items-center gap-3 bg-card border rounded-lg px-4 py-3 shadow-lg animate-pulse">
+        <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
+        <div className="space-y-1">
+          <p className="text-sm font-medium">{message}</p>
+          <div className="w-32 h-1 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-full bg-blue-600 rounded-full animate-loading-bar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 
 
