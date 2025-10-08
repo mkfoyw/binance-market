@@ -63,13 +63,4 @@ export const SUPPORTED_SOURCES = ["binance", "okx", "gate", "dexscreener"] as co
 export type SupportedSource = typeof SUPPORTED_SOURCES[number];
 
 // 默认标签列表（优先显示）
-export const DEFAULT_TAGS = [
-  "AI",
-  "DeFi",
-  "GameFi",
-  "NFT",
-  "Layer2",
-  "Meme",
-  "RWA",
-  "Infrastructure"
-] as const;
+export const DEFAULT_TAGS= ["main", "watch", "btc", "eth", "sol", "bnb", "cosmos","meme","l1", "l2","ai", "amm", "lending", "lsd","deritives","gaming"]

@@ -30,6 +30,7 @@ import {
 import { useGetAllPricesQuery } from "@/lib/services/crypto-price-tracker";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
+import { DEFAULT_TAGS } from "@/lib/types/crypto";
 
 interface TokenAnalysisData {
   id: string;
@@ -53,9 +54,6 @@ interface TokenAnalysisData {
 
 type SortField = 'symbol' | 'price' | 'fdv' | 'marketCap' | 'percentage_180' | 'percentage_900' | 'percentage_1800' | 'percentage_3600' | 'percentage_14400' | 'percentage_43200' | 'percentage_86400' | 'none';
 type SortDirection = 'asc' | 'desc';
-
-// 默认标签
-const DEFAULT_TAGS= ["main", "watch", "btc", "eth", "sol", "bnb", "cosmos","meme","l1", "l2","ai", "amm", "lending", "lsd","deritives","gaming"]
 
 // 工具函数
 function getBinanceFuturesUrl(symbol: string): string {

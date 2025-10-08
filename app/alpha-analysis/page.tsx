@@ -800,7 +800,7 @@ export default function BinanceAlphaPage() {
                   Binance Alpha 代币分析
                 </h1>
                 <p className="text-sm sm:text-base text-muted-foreground mt-1">
-                  实时 Alpha 项目数据和市场统计 · 自动刷新
+                  Alpha 项目代币分析
                 </p>
               </div>
             </div>
