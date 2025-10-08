@@ -61,3 +61,15 @@ export interface HealthResponse {
 // 支持的数据源
 export const SUPPORTED_SOURCES = ["binance", "okx", "gate", "dexscreener"] as const;
 export type SupportedSource = typeof SUPPORTED_SOURCES[number];
+
+// 默认标签列表（优先显示）
+export const DEFAULT_TAGS = [
+  "AI",
+  "DeFi",
+  "GameFi",
+  "NFT",
+  "Layer2",
+  "Meme",
+  "RWA",
+  "Infrastructure"
+] as const;

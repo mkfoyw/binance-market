@@ -32,43 +32,58 @@ const getTradingUrl = (source: string, baseSymbol: string, quoteSymbol: string) 
 // 加载状态组件
 function LoadingState({ message = "加载中..." }: { message?: string }) {
   return (
-    <div className="container mx-auto py-8 px-4 space-y-6">
-      {/* 页面标题骨架 */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-2">
-          <Skeleton className="h-9 w-64" />
-          <Skeleton className="h-5 w-96" />
+    <div className="w-full min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8 space-y-6 max-w-[1600px]">
+        {/* Header Skeleton */}
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-lg">
+                <Activity className="h-8 w-8 text-primary animate-pulse" />
+              </div>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  币安合约行情分析
+                </h1>
+                <p className="text-sm sm:text-base text-muted-foreground mt-1">
+                  {message}
+                </p>
+              </div>
+            </div>
+            <div className="p-3 rounded-xl bg-secondary/50 animate-pulse">
+              <RefreshCw className="h-5 w-5" />
+            </div>
+          </div>
         </div>
-        <Skeleton className="h-5 w-48" />
-      </div>
 
-      {/* 统计卡片骨架 */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {[1, 2, 3, 4].map((i) => (
-          <Card key={i} className="animate-pulse">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-4 w-4" />
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-8 w-16 mb-2" />
-              <Skeleton className="h-3 w-32" />
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* 时间筛选按钮骨架 */}
-      <div className="bg-background/95 backdrop-blur py-4 -mx-4 px-4 border-b">
-        <div className="flex flex-wrap justify-center gap-2">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <Skeleton key={i} className="h-8 w-20" />
+        {/* 统计卡片骨架 */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Card key={i} className="border-l-4 border-l-primary/20 animate-pulse">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-4" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-16 mb-2" />
+                <Skeleton className="h-3 w-32" />
+              </CardContent>
+            </Card>
           ))}
         </div>
-      </div>
 
-      {/* 排行榜卡片骨架 */}
-      <div className="space-y-8">
+        {/* 时间筛选按钮骨架 */}
+        <Card className="shadow-md animate-pulse">
+          <CardContent className="pt-6">
+            <div className="flex flex-wrap justify-center gap-2">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <Skeleton key={i} className="h-8 w-20" />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 排行榜卡片骨架 */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* 涨幅榜骨架 */}
           <Card className="bg-green-50 dark:bg-green-950 border-l-4 border-l-green-500 animate-pulse">
@@ -84,13 +99,6 @@ function LoadingState({ message = "加载中..." }: { message?: string }) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {/* 表头 */}
-                <div className="flex items-center px-3 pb-2 border-b">
-                  <Skeleton className="h-3 w-12" />
-                  <Skeleton className="h-3 w-12 mx-auto" />
-                  <Skeleton className="h-3 w-12 ml-auto" />
-                </div>
-                {/* 数据行 */}
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div key={i} className="flex items-center p-3 rounded-md bg-white/50 dark:bg-gray-800/50">
                     <div className="flex items-center gap-3 w-32">
@@ -119,13 +127,6 @@ function LoadingState({ message = "加载中..." }: { message?: string }) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {/* 表头 */}
-                <div className="flex items-center px-3 pb-2 border-b">
-                  <Skeleton className="h-3 w-12" />
-                  <Skeleton className="h-3 w-12 mx-auto" />
-                  <Skeleton className="h-3 w-12 ml-auto" />
-                </div>
-                {/* 数据行 */}
                 {[1, 2, 3, 4, 5].map((i) => (
                   <div key={i} className="flex items-center p-3 rounded-md bg-white/50 dark:bg-gray-800/50">
                     <div className="flex items-center gap-3 w-32">
@@ -139,17 +140,6 @@ function LoadingState({ message = "加载中..." }: { message?: string }) {
               </div>
             </CardContent>
           </Card>
-        </div>
-      </div>
-
-      {/* 加载指示器 - 浮动在右下角 */}
-      <div className="fixed bottom-8 right-8 flex items-center gap-3 bg-card border rounded-lg px-4 py-3 shadow-lg animate-pulse">
-        <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
-        <div className="space-y-1">
-          <p className="text-sm font-medium">{message}</p>
-          <div className="w-32 h-1 bg-gray-200 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 rounded-full animate-loading-bar"></div>
-          </div>
         </div>
       </div>
     </div>
@@ -708,82 +698,115 @@ export default function BinanceAnalysisPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4">
-        <LoadingState message="正在加载币安行情数据..." />
-      </div>
-    );
+    return <LoadingState message="正在加载币安行情数据..." />;
   }
 
   if (error) {
     return (
-      <div className="container mx-auto py-8 px-4">
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Activity className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">数据加载失败</h3>
-            <p className="text-muted-foreground text-center">
-              无法获取币安行情数据，请检查网络连接或稍后重试。
-            </p>
-          </CardContent>
-        </Card>
+      <div className="w-full min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+        <div className="container mx-auto px-4 py-8 max-w-[1600px]">
+          <Card className="border-destructive">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 text-destructive">
+                <Activity className="h-5 w-5" />
+                <p>数据加载失败，请检查网络连接或稍后重试</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 space-y-6">
-      {/* 页面标题 */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">币安合约行情分析</h1>
-          <p className="text-muted-foreground">实时展示币安交易所合约不同时间段的涨跌幅排行榜</p>
+    <div className="w-full min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8 space-y-6 max-w-[1600px]">
+        {/* 页面标题 */}
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-lg">
+                <Activity className="h-8 w-8 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  币安合约行情分析
+                </h1>
+                <p className="text-sm sm:text-base text-muted-foreground mt-1">
+                  实时展示币安交易所合约不同时间段的涨跌幅排行榜
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              {binancePrices?.data?.[0] && (
+                <div className="text-right text-sm text-muted-foreground">
+                  <div>最后更新</div>
+                  <div className="font-mono">
+                    {format(new Date(binancePrices.data[0].priceData.time * 1000), 'HH:mm:ss', { locale: zhCN })}
+                  </div>
+                </div>
+              )}
+              <button
+                onClick={handleRefresh}
+                className="p-3 rounded-xl hover:bg-secondary transition-all hover:scale-105 active:scale-95 shadow-sm"
+                title="刷新数据"
+                aria-label="刷新数据"
+              >
+                <RefreshCw className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
         </div>
-        {binancePrices?.data?.[0] && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground md:w-auto w-full">
-            <Clock className="h-4 w-4" />
-            <span>
-              最后更新: {format(new Date(binancePrices.data[0].priceData.time * 1000), 'yyyy-MM-dd HH:mm:ss', { locale: zhCN })}
-            </span>
+
+        {/* 统计卡片 */}
+        {stats && (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Card className="hover:shadow-lg transition-shadow border-l-4 border-l-primary/50">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">总交易对</CardTitle>
+                <Activity className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.totalTokens}</div>
+                <p className="text-xs text-muted-foreground">币安交易对总数</p>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-lg transition-shadow border-l-4 border-l-orange-500/50">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">选中时间段</CardTitle>
+                <Clock className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.selectedCount}</div>
+                <p className="text-xs text-muted-foreground">
+                  {stats.isAllPeriods ? "显示所有时间段" : stats.isMultiSelect ? "多选模式" : "单选模式"}
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-lg transition-shadow border-l-4 border-l-green-500/50">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">显示模式</CardTitle>
+                {stats.isMultiSelect ? <Activity className="h-4 w-4 text-muted-foreground" /> : <Clock className="h-4 w-4 text-muted-foreground" />}
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.isAllPeriods ? "全部" : stats.isMultiSelect ? "多选" : "单选"}</div>
+                <p className="text-xs text-muted-foreground">
+                  {stats.isAllPeriods ? "同时显示所有时间段" : stats.isMultiSelect ? "可同时查看多个时间段" : "仅显示选中时间段"}
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="hover:shadow-lg transition-shadow border-l-4 border-l-blue-500/50">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">实时更新</CardTitle>
+                <RefreshCw className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">15秒</div>
+                <p className="text-xs text-muted-foreground">自动刷新间隔</p>
+              </CardContent>
+            </Card>
           </div>
         )}
-      </div>
-
-      {/* 统计卡片 */}
-      {stats && (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <StatsCard
-            title="总交易对"
-            value={stats.totalTokens}
-            icon={Activity}
-            description="币安交易对总数"
-          />
-          <StatsCard
-            title="选中时间段"
-            value={stats.selectedCount}
-            icon={Clock}
-            description={
-              stats.isAllPeriods ? "显示所有时间段" : 
-              stats.isMultiSelect ? "多选模式" : "单选模式"
-            }
-          />
-          <StatsCard
-            title="显示模式"
-            value={stats.isAllPeriods ? "全部" : stats.isMultiSelect ? "多选" : "单选"}
-            icon={stats.isMultiSelect ? Activity : Clock}
-            description={
-              stats.isAllPeriods ? "同时显示所有时间段" :
-              stats.isMultiSelect ? "可同时查看多个时间段" : "仅显示选中时间段"
-            }
-          />
-          <StatsCard
-            title="实时更新"
-            value="15秒"
-            icon={RefreshCw}
-            description="每15秒自动刷新一次数据"
-          />
-        </div>
-      )}
 
       {/* 排行榜面板 */}
       <div className="space-y-4">
@@ -800,8 +823,8 @@ export default function BinanceAnalysisPage() {
                   onClick={() => handlePeriodToggle(period as TimePeriodKey)}
                   className={`transition-all ${
                     isSelected
-                      ? "bg-primary text-primary-foreground shadow-md" 
-                      : "hover:bg-muted"
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
                   }`}
                 >
                   <Clock className="h-3 w-3 mr-1" />
@@ -846,6 +869,7 @@ export default function BinanceAnalysisPage() {
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 }

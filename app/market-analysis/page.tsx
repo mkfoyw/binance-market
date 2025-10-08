@@ -24,7 +24,8 @@ import {
   Layers,
   MoreHorizontal,
   ExternalLink,
-  Loader2
+  Loader2,
+  RotateCcw
 } from "lucide-react";
 import { useGetAllPricesQuery } from "@/lib/services/crypto-price-tracker";
 import { format } from "date-fns";
@@ -85,128 +86,117 @@ function getTradingUrl(source: string, baseSymbol: string, quoteSymbol: string, 
 // 加载状态组件
 function LoadingState({ message = "加载中..." }: { message?: string }) {
   return (
-    <div className="w-full py-4 px-2 space-y-4">
-      {/* 页面标题骨架 */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-2">
-          <Skeleton className="h-9 w-48" />
-          <Skeleton className="h-5 w-64" />
-        </div>
-        <Skeleton className="h-9 w-40" />
-      </div>
-
-      {/* 统计卡片骨架 */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {[1, 2, 3, 4].map((i) => (
-          <Card key={i} className="animate-pulse">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-4 w-4" />
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-8 w-16 mb-2" />
-              <Skeleton className="h-3 w-24" />
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* 筛选和搜索骨架 */}
-      <Card className="animate-pulse">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Skeleton className="h-5 w-5" />
-            <Skeleton className="h-6 w-24" />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-6">
-            <Skeleton className="h-9 w-full max-w-md" />
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-2">
-                <Skeleton className="h-5 w-16" />
-                <div className="flex gap-2">
-                  <Skeleton className="h-8 w-20" />
-                  <Skeleton className="h-8 w-20" />
-                  <Skeleton className="h-8 w-20" />
-                </div>
+    <div className="w-full min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8 space-y-6 max-w-[1600px]">
+        {/* Header Skeleton */}
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-lg">
+                <BarChart3 className="h-8 w-8 text-primary animate-pulse" />
               </div>
-              <div className="space-y-2">
-                <Skeleton className="h-5 w-16" />
-                <div className="flex gap-2">
-                  <Skeleton className="h-8 w-20" />
-                  <Skeleton className="h-8 w-20" />
-                </div>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  市场行情分析
+                </h1>
+                <p className="text-sm sm:text-base text-muted-foreground mt-1">
+                  {message}
+                </p>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 数据表格骨架 */}
-      <Card className="animate-pulse">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <Skeleton className="h-6 w-40" />
-            <Skeleton className="h-9 w-20" />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {/* 表头 */}
-            <div className="flex gap-4 pb-3 border-b">
-              <Skeleton className="h-5 w-24" />
-              <Skeleton className="h-5 w-16 ml-auto" />
-              <Skeleton className="h-5 w-16" />
-              <Skeleton className="h-5 w-16" />
-              <Skeleton className="h-5 w-16" />
-              <Skeleton className="h-5 w-16" />
-              <Skeleton className="h-5 w-16" />
-              <Skeleton className="h-5 w-16" />
-              <Skeleton className="h-5 w-16" />
-              <Skeleton className="h-5 w-20" />
-              <Skeleton className="h-5 w-16" />
-              <Skeleton className="h-5 w-16" />
-              <Skeleton className="h-5 w-12" />
+            <div className="p-3 rounded-xl bg-secondary/50 animate-pulse">
+              <RefreshCw className="h-5 w-5" />
             </div>
-            {/* 数据行 */}
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="flex gap-4 py-3 border-b">
-                <div className="space-y-1">
-                  <Skeleton className="h-5 w-16" />
-                  <Skeleton className="h-4 w-20" />
-                </div>
-                <Skeleton className="h-5 w-20 ml-auto" />
-                <Skeleton className="h-5 w-16" />
-                <Skeleton className="h-5 w-16" />
-                <Skeleton className="h-5 w-16" />
-                <Skeleton className="h-5 w-16" />
-                <Skeleton className="h-5 w-16" />
-                <Skeleton className="h-5 w-16" />
-                <Skeleton className="h-5 w-16" />
-                <Skeleton className="h-5 w-20" />
-                <Skeleton className="h-5 w-16" />
-                <Skeleton className="h-5 w-16" />
-                <Skeleton className="h-5 w-8" />
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 加载指示器 - 浮动在右下角 */}
-      <div className="fixed bottom-8 right-8 flex items-center gap-3 bg-card border rounded-lg px-4 py-3 shadow-lg animate-pulse">
-        <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
-        <div className="space-y-1">
-          <p className="text-sm font-medium">{message}</p>
-          <div className="w-32 h-1 bg-gray-200 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 rounded-full animate-loading-bar"></div>
           </div>
         </div>
+
+        {/* 统计卡片骨架 */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Card key={i} className="border-l-4 border-l-primary/20 animate-pulse">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-4 w-4" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-16 mb-2" />
+                <Skeleton className="h-3 w-32" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* 筛选卡片骨架 */}
+        <Card className="shadow-md animate-pulse">
+          <CardHeader>
+            <Skeleton className="h-6 w-32" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-3">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+              <Skeleton className="h-10 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 表格骨架 */}
+        <Card className="shadow-md">
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-background/95 border-b">
+                  <tr>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                      <th key={i} className="p-3">
+                        <Skeleton className="h-4 w-16" />
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                    <tr key={i} className="border-b animate-pulse">
+                      <td className="p-3">
+                        <Skeleton className="h-6 w-20" />
+                      </td>
+                      <td className="p-3">
+                        <Skeleton className="h-6 w-16" />
+                      </td>
+                      <td className="p-3">
+                        <Skeleton className="h-6 w-24" />
+                      </td>
+                      <td className="p-3">
+                        <Skeleton className="h-6 w-20" />
+                      </td>
+                      <td className="p-3">
+                        <Skeleton className="h-6 w-20" />
+                      </td>
+                      <td className="p-3">
+                        <Skeleton className="h-6 w-16" />
+                      </td>
+                      <td className="p-3">
+                        <Skeleton className="h-6 w-24" />
+                      </td>
+                      <td className="p-3">
+                        <Skeleton className="h-6 w-8" />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 }
+
+
 
 // 悬浮菜单组件 - 使用 React.memo 防止不必要的重新渲染
 const HoverPopoverMenu = React.memo(function HoverPopoverMenu({ token }: { token: TokenAnalysisData }) {
@@ -282,6 +272,8 @@ export default function MarketAnalysisPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortField, setSortField] = useState<SortField>('none');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  // 重置按钮动画状态
+  const [isResetting, setIsResetting] = useState(false);
   
 
 
@@ -504,6 +496,18 @@ export default function MarketAnalysisPage() {
       <ChevronDown className="h-4 w-4 text-blue-600" />;
   };
 
+  // 重置排序
+  const handleReset = () => {
+    setIsResetting(true);
+    setSortField('none');
+    setSortDirection('desc');
+    
+    // 动画结束后重置状态
+    setTimeout(() => {
+      setIsResetting(false);
+    }, 600);
+  };
+
   // 统计数据
   const stats = useMemo(() => {
     const totalTokens = filteredData.length;
@@ -552,82 +556,100 @@ export default function MarketAnalysisPage() {
   }
 
   return (
-    <div className="w-full py-4 px-2 space-y-4">
-      {/* 页面标题 */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">市场行情分析</h1>
-          <p className="text-muted-foreground">从多个数据源对加密货币市场代币的涨跌幅进行分析和排序</p>
-        </div>
-        <div className="flex items-center gap-3">
-          {/* 最后更新时间 */}
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <RefreshCw className="h-4 w-4" />
-            <span>
-              最后更新: {processedData.length > 0 ? 
-                format(new Date(Math.max(...processedData.map(t => t.updateTime)) * 1000), 'HH:mm:ss', { locale: zhCN }) : 
-                '--'
-              }
-            </span>
+    <div className="w-full min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8 space-y-6 max-w-[1600px]">
+        {/* 页面标题 */}
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-lg">
+                <BarChart3 className="h-8 w-8 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  市场行情分析
+                </h1>
+                <p className="text-sm sm:text-base text-muted-foreground mt-1">
+                  从多个数据源对加密货币市场代币的涨跌幅进行分析和排序
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              {processedData.length > 0 && (
+                <div className="text-right text-sm text-muted-foreground">
+                  <div>最后更新</div>
+                  <div className="font-mono">
+                    {format(new Date(Math.max(...processedData.map(t => t.updateTime)) * 1000), 'HH:mm:ss', { locale: zhCN })}
+                  </div>
+                </div>
+              )}
+              <button
+                onClick={() => window.location.reload()}
+                className="p-3 rounded-xl hover:bg-secondary transition-all hover:scale-105 active:scale-95 shadow-sm"
+                title="刷新数据"
+                aria-label="刷新数据"
+              >
+                <RefreshCw className="h-5 w-5" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 统计卡片 */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">总代币数</CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalTokens}</div>
-            <p className="text-xs text-muted-foreground">当前筛选结果</p>
-          </CardContent>
-        </Card>
+        {/* 统计卡片 */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card className="hover:shadow-lg transition-shadow border-l-4 border-l-primary/50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">总代币数</CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.totalTokens}</div>
+              <p className="text-xs text-muted-foreground">当前筛选结果</p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">上涨代币</CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.gainers}</div>
-            <p className="text-xs text-muted-foreground">24小时内上涨</p>
-          </CardContent>
-        </Card>
+          <Card className="hover:shadow-lg transition-shadow border-l-4 border-l-green-500/50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">上涨代币</CardTitle>
+              <TrendingUp className="h-4 w-4 text-green-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">{stats.gainers}</div>
+              <p className="text-xs text-muted-foreground">24小时内上涨</p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">下跌代币</CardTitle>
-            <TrendingDown className="h-4 w-4 text-red-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats.losers}</div>
-            <p className="text-xs text-muted-foreground">24小时内下跌</p>
-          </CardContent>
-        </Card>
+          <Card className="hover:shadow-lg transition-shadow border-l-4 border-l-red-500/50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">下跌代币</CardTitle>
+              <TrendingDown className="h-4 w-4 text-red-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-red-600">{stats.losers}</div>
+              <p className="text-xs text-muted-foreground">24小时内下跌</p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">平均涨跌</CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${stats.avgChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {stats.avgChange >= 0 ? '+' : ''}{stats.avgChange.toFixed(2)}%
-            </div>
-            <p className="text-xs text-muted-foreground">24小时平均变化</p>
-          </CardContent>
-        </Card>
-      </div>
+          <Card className="hover:shadow-lg transition-shadow border-l-4 border-l-blue-500/50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">平均涨跌</CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className={`text-2xl font-bold ${stats.avgChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {stats.avgChange >= 0 ? '+' : ''}{stats.avgChange.toFixed(2)}%
+              </div>
+              <p className="text-xs text-muted-foreground">24小时平均变化</p>
+            </CardContent>
+          </Card>
+        </div>
 
-      {/* 筛选和搜索控制 */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
-            筛选和搜索
+        {/* 筛选和搜索控制 */}
+        <Card className="shadow-md">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Filter className="h-5 w-5" />
+              筛选和搜索
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -656,7 +678,11 @@ export default function MarketAnalysisPage() {
                     variant={selectedSource === "all" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedSource("all")}
-                    className={selectedSource === "all" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                    className={`transition-all ${
+                      selectedSource === "all" 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                        : "hover:scale-105"
+                    }`}
                   >
                     所有数据源
                   </Button>
@@ -664,7 +690,11 @@ export default function MarketAnalysisPage() {
                     variant={selectedSource === "binance" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedSource("binance")}
-                    className={selectedSource === "binance" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                    className={`transition-all ${
+                      selectedSource === "binance" 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                        : "hover:scale-105"
+                    }`}
                   >
                     Binance
                   </Button>
@@ -672,7 +702,11 @@ export default function MarketAnalysisPage() {
                     variant={selectedSource === "gate" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedSource("gate")}
-                    className={selectedSource === "gate" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                    className={`transition-all ${
+                      selectedSource === "gate" 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                        : "hover:scale-105"
+                    }`}
                   >
                     Gate
                   </Button>
@@ -680,7 +714,11 @@ export default function MarketAnalysisPage() {
                     variant={selectedSource === "dexscreener" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedSource("dexscreener")}
-                    className={selectedSource === "dexscreener" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                    className={`transition-all ${
+                      selectedSource === "dexscreener" 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                        : "hover:scale-105"
+                    }`}
                   >
                     DexScreener
                   </Button>
@@ -698,7 +736,11 @@ export default function MarketAnalysisPage() {
                     variant={selectedCategory === "all" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedCategory("all")}
-                    className={selectedCategory === "all" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                    className={`transition-all ${
+                      selectedCategory === "all" 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                        : "hover:scale-105"
+                    }`}
                   >
                     所有类别
                   </Button>
@@ -706,7 +748,11 @@ export default function MarketAnalysisPage() {
                     variant={selectedCategory === "popular" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedCategory("popular")}
-                    className={selectedCategory === "popular" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                    className={`transition-all ${
+                      selectedCategory === "popular" 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                        : "hover:scale-105"
+                    }`}
                   >
                     Popular
                   </Button>
@@ -714,7 +760,11 @@ export default function MarketAnalysisPage() {
                     variant={selectedCategory === "seed" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedCategory("seed")}
-                    className={selectedCategory === "seed" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                    className={`transition-all ${
+                      selectedCategory === "seed" 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                        : "hover:scale-105"
+                    }`}
                   >
                     Seed
                   </Button>
@@ -733,7 +783,11 @@ export default function MarketAnalysisPage() {
                   variant={selectedTags.length === 0 ? "default" : "outline"}
                   size="sm"
                   onClick={() => handleTagToggle("all")}
-                  className={selectedTags.length === 0 ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                  className={`transition-all ${
+                    selectedTags.length === 0 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
                 >
                   所有标签
                 </Button>
@@ -744,7 +798,11 @@ export default function MarketAnalysisPage() {
                     variant={selectedTags.includes(defaultTag) ? "default" : "outline"}
                     size="sm"
                     onClick={() => handleTagToggle(defaultTag)}
-                    className={selectedTags.includes(defaultTag) ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                    className={`transition-all ${
+                      selectedTags.includes(defaultTag) 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                        : "hover:scale-105"
+                    }`}
                   >
                     {defaultTag}
                   </Button>
@@ -756,7 +814,11 @@ export default function MarketAnalysisPage() {
                     variant={selectedTags.includes(tag) ? "default" : "outline"}
                     size="sm"
                     onClick={() => handleTagToggle(tag)}
-                    className={selectedTags.includes(tag) ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                    className={`transition-all ${
+                      selectedTags.includes(tag) 
+                        ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                        : "hover:scale-105"
+                    }`}
                   >
                     {tag}
                   </Button>
@@ -771,10 +833,19 @@ export default function MarketAnalysisPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>市场数据 ({filteredData.length} 个代币)</span>
-            <Button onClick={() => refetch()} variant="outline" size="sm">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              刷新
+            <span>{filteredData.length} 个代币</span>
+            <Button
+              onClick={handleReset}
+              variant="outline"
+              size="sm"
+              disabled={isResetting}
+              className="relative overflow-hidden"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" />
+              重置排序
+              {isResetting && (
+                <span className="absolute inset-0 bg-blue-500/10 animate-pulse" />
+              )}
             </Button>
           </CardTitle>
         </CardHeader>
@@ -997,7 +1068,7 @@ export default function MarketAnalysisPage() {
           </div>
         </CardContent>
       </Card>
-
+      </div>
     </div>
   );
 }

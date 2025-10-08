@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { PriceDataResponse,  } from "../types/crypto";
+import { PriceDataResponse } from "../types/crypto";
+import { BinanceAlphaResponse } from "../types/binance-alpha";
 
 // 使用 Cloudflare Tunnel 提供的 HTTPS 地址
-const API_BASE_URL = "https://researchers-cologne-develop-figure.trycloudflare.com";
+const API_BASE_URL = "https://researchers-cologne-develop-figure.trycloudflare.com/api/v1";
 
 export const cryptoPriceTrackerApi = createApi({
   reducerPath: "cryptoPriceTrackerApi",
@@ -17,15 +18,22 @@ export const cryptoPriceTrackerApi = createApi({
   endpoints: (builder) => ({
     // 获取所有价格数据
     getAllPrices: builder.query<PriceDataResponse, void>({
-      query: () => "/api/v1/prices",
+      query: () => "/prices",
       providesTags: ["Price"],
     }),
     
     // 根据来源获取价格数据
     getPricesBySource: builder.query<PriceDataResponse & { source: string }, string>({
-      query: (source) => `/api/v1/prices/source/${source}`,
+      query: (source) => `/prices/source/${source}`,
       providesTags: ["Price"],
     }),
+    
+    // 获取 Binance Alpha tokens（包含 metadata）
+    getBinanceAlphaTokens: builder.query<BinanceAlphaResponse, void>({
+      query: () => "/binance-alpha/tokens",
+      providesTags: ["Price"],
+    }),
+    
     // 健康检查（注意：health 端点在根路径，不在 /api/v1 下）
     getHealthStatus: builder.query<{ status: string; message: string }, void>({
       query: () => "/health",
@@ -36,5 +44,6 @@ export const cryptoPriceTrackerApi = createApi({
 export const {
   useGetAllPricesQuery,
   useGetPricesBySourceQuery,
+  useGetBinanceAlphaTokensQuery,
   useGetHealthStatusQuery,
 } = cryptoPriceTrackerApi;

@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
   assetPrefix: isProd ? `/${repoName}/` : '',
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'bin.bnbstatic.com',
+        pathname: '/**',
+      },
+    ],
   },
   trailingSlash: true,
 };

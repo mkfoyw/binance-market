@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Activity, BarChart3 } from "lucide-react"
+import { Activity, BarChart3, TrendingUp } from "lucide-react"
 import { ModeToggle } from "@/components/mode-toggle"
 
 export function SiteHeader() {
@@ -11,13 +11,21 @@ export function SiteHeader() {
             <Activity className="h-6 w-6" />
             <span className="font-bold">币安市场分析</span>
           </Link>
+               <Link 
+            href="/alpha-analysis" 
+            className="flex items-center space-x-2 font-bold hover:opacity-80 transition-opacity"
+          >
+            <TrendingUp className="h-6 w-6" />
+            <span>Alpha 代币分析</span>
+          </Link>
           <Link 
             href="/market-analysis" 
             className="flex items-center space-x-2 font-bold hover:opacity-80 transition-opacity"
           >
             <BarChart3 className="h-6 w-6" />
-            <span>市场分析</span>
+            <span>代币市场分析</span>
           </Link>
+     
         </div>
         <div className="flex flex-1 items-center justify-end">
           <nav className="flex items-center space-x-2">
