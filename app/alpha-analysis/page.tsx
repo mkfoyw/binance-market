@@ -478,7 +478,7 @@ export default function BinanceAlphaPage() {
   });
   const [filteredTokens, setFilteredTokens] = useState<BinanceAlphaTokenWithMetadata[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'score' | 'marketCap' | 'percentChange24h' | 'liquidity' | 'volume24h' | 'price' | 'listingTime' | 'holders'>('score');
+  const [sortBy, setSortBy] = useState<'score' | 'marketCap' | 'percentChange24h' | 'liquidity' | 'volume24h' | 'price' | 'listingTime' | 'holders' | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   // 状态筛选: 多选数组
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
@@ -567,49 +567,51 @@ export default function BinanceAlphaPage() {
     }
 
     // 排序
-    filtered = [...filtered].sort((a, b) => {
-      let aValue: number, bValue: number;
-      const aToken = a.alphaToken;
-      const bToken = b.alphaToken;
-      
-      switch (sortBy) {
-        case 'score':
-          aValue = aToken.score;
-          bValue = bToken.score;
-          break;
-        case 'marketCap':
-          aValue = parseFloat(aToken.marketCap);
-          bValue = parseFloat(bToken.marketCap);
-          break;
-        case 'percentChange24h':
-          aValue = parseFloat(aToken.percentChange24h);
-          bValue = parseFloat(bToken.percentChange24h);
-          break;
-        case 'liquidity':
-          aValue = parseFloat(aToken.liquidity) || 0;
-          bValue = parseFloat(bToken.liquidity) || 0;
-          break;
-        case 'volume24h':
-          aValue = parseFloat(aToken.volume24h);
-          bValue = parseFloat(bToken.volume24h);
-          break;
-        case 'price':
-          aValue = parseFloat(aToken.price);
-          bValue = parseFloat(bToken.price);
-          break;
-        case 'listingTime':
-          aValue = aToken.listingTime || 0;
-          bValue = bToken.listingTime || 0;
-          break;
-        case 'holders':
-          aValue = Number(String(aToken.holders).replace(/\D+/g, '')) || 0;
-          bValue = Number(String(bToken.holders).replace(/\D+/g, '')) || 0;
-          break;
-        default:
-          return 0;
-      }
-      return sortOrder === 'desc' ? bValue - aValue : aValue - bValue;
-    });
+    if (sortBy) {
+      filtered = [...filtered].sort((a, b) => {
+        let aValue: number, bValue: number;
+        const aToken = a.alphaToken;
+        const bToken = b.alphaToken;
+        
+        switch (sortBy) {
+          case 'score':
+            aValue = aToken.score;
+            bValue = bToken.score;
+            break;
+          case 'marketCap':
+            aValue = parseFloat(aToken.marketCap);
+            bValue = parseFloat(bToken.marketCap);
+            break;
+          case 'percentChange24h':
+            aValue = parseFloat(aToken.percentChange24h);
+            bValue = parseFloat(bToken.percentChange24h);
+            break;
+          case 'liquidity':
+            aValue = parseFloat(aToken.liquidity) || 0;
+            bValue = parseFloat(bToken.liquidity) || 0;
+            break;
+          case 'volume24h':
+            aValue = parseFloat(aToken.volume24h);
+            bValue = parseFloat(bToken.volume24h);
+            break;
+          case 'price':
+            aValue = parseFloat(aToken.price);
+            bValue = parseFloat(bToken.price);
+            break;
+          case 'listingTime':
+            aValue = aToken.listingTime || 0;
+            bValue = bToken.listingTime || 0;
+            break;
+          case 'holders':
+            aValue = Number(String(aToken.holders).replace(/\D+/g, '')) || 0;
+            bValue = Number(String(bToken.holders).replace(/\D+/g, '')) || 0;
+            break;
+          default:
+            return 0;
+        }
+        return sortOrder === 'desc' ? bValue - aValue : aValue - bValue;
+      });
+    }
 
     setFilteredTokens(filtered);
   };
@@ -636,7 +638,7 @@ export default function BinanceAlphaPage() {
   // 重置排序
   const handleReset = () => {
     setIsResetting(true);
-    setSortBy('score');
+    setSortBy(null);
     setSortOrder('desc');
     
     // 动画结束后重置状态
@@ -932,51 +934,51 @@ export default function BinanceAlphaPage() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-3 font-medium">代币</th>
-                    <th className="text-right p-3 font-medium">
-                      <button onClick={() => toggleSort('price')} className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors">
+                    <th className="text-left p-3 font-medium whitespace-nowrap">代币</th>
+                    <th className="text-right p-3 font-medium whitespace-nowrap">
+                      <button onClick={() => toggleSort('price')} className="flex items-center gap-1 ml-auto hover:text-blue-600 transition-colors whitespace-nowrap">
                         价格
                         {getSortIcon('price')}
                       </button>
                     </th>
-                    <th className="text-right p-3 font-medium">
-                      <button onClick={() => toggleSort('percentChange24h')} className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors">
+                    <th className="text-right p-3 font-medium whitespace-nowrap">
+                      <button onClick={() => toggleSort('percentChange24h')} className="flex items-center gap-1 ml-auto hover:text-blue-600 transition-colors whitespace-nowrap">
                         24h涨跌
                         {getSortIcon('percentChange24h')}
                       </button>
                     </th>
-                    <th className="text-right p-3 font-medium">
-                      <button onClick={() => toggleSort('liquidity')} className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors">
+                    <th className="text-right p-3 font-medium whitespace-nowrap">
+                      <button onClick={() => toggleSort('liquidity')} className="flex items-center gap-1 ml-auto hover:text-blue-600 transition-colors whitespace-nowrap">
                         流动性
                         {getSortIcon('liquidity')}
                       </button>
                     </th>
-                    <th className="text-right p-3 font-medium">
-                      <button onClick={() => toggleSort('marketCap')} className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors">
+                    <th className="text-right p-3 font-medium whitespace-nowrap">
+                      <button onClick={() => toggleSort('marketCap')} className="flex items-center gap-1 ml-auto hover:text-blue-600 transition-colors whitespace-nowrap">
                         市值
                         {getSortIcon('marketCap')}
                       </button>
                     </th>
-                    <th className="text-right p-3 font-medium">
-                      <button onClick={() => toggleSort('volume24h')} className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors">
+                    <th className="text-right p-3 font-medium whitespace-nowrap">
+                      <button onClick={() => toggleSort('volume24h')} className="flex items-center gap-1 ml-auto hover:text-blue-600 transition-colors whitespace-nowrap">
                         24h交易量
                         {getSortIcon('volume24h')}
                       </button>
                     </th>
-                    <th className="text-right p-3 font-medium">
-                      <button onClick={() => toggleSort('holders')} className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors">
+                    <th className="text-right p-3 font-medium whitespace-nowrap">
+                      <button onClick={() => toggleSort('holders')} className="flex items-center gap-1 ml-auto hover:text-blue-600 transition-colors whitespace-nowrap">
                         持有者
                         {getSortIcon('holders')}
                       </button>
                     </th>
-                    <th className="text-right p-3 font-medium">
-                      <button onClick={() => toggleSort('listingTime')} className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors">
+                    <th className="text-right p-3 font-medium whitespace-nowrap">
+                      <button onClick={() => toggleSort('listingTime')} className="flex items-center gap-1 ml-auto hover:text-blue-600 transition-colors whitespace-nowrap">
                         上线时间
                         {getSortIcon('listingTime')}
                       </button>
                     </th>
-                    <th className="text-left p-3 font-medium">标签</th>
-                    <th className="text-center p-3 font-medium">操作</th>
+                    <th className="text-left p-3 font-medium whitespace-nowrap">标签</th>
+                    <th className="text-center p-3 font-medium whitespace-nowrap">操作</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1145,15 +1147,41 @@ function TokenTableRow({
         <div className="flex gap-1 flex-wrap">
           {metadata?.tags && metadata.tags.length > 0 ? (
             <>
-              {metadata.tags.slice(0, 2).map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
-              {metadata.tags.length > 2 && (
-                <Badge variant="secondary" className="text-xs">
-                  +{metadata.tags.length - 2}
-                </Badge>
+              {metadata.tags.length <= 2 ? (
+                // 如果标签数量 <= 2，显示所有标签
+                metadata.tags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))
+              ) : (
+                // 如果标签数量 > 2，只显示第一个标签和数量
+                <TooltipProvider>
+                  <Tooltip delayDuration={200}>
+                    <TooltipTrigger asChild>
+                      <div className="flex gap-1 cursor-help">
+                        <Badge variant="secondary" className="text-xs">
+                          {metadata.tags[0]}
+                        </Badge>
+                        <Badge variant="secondary" className="text-xs">
+                          +{metadata.tags.length - 1}
+                        </Badge>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent 
+                      className="max-w-xs p-3 bg-popover border-border shadow-lg"
+                      sideOffset={5}
+                    >
+                      <div className="flex gap-1 flex-wrap">
+                        {metadata.tags.map((tag) => (
+                          <Badge key={tag} variant="secondary" className="text-xs">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
             </>
           ) : (

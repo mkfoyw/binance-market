@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -1041,15 +1042,41 @@ export default function MarketAnalysisPage() {
                       </td>
                       <td className="p-3">
                         <div className="flex gap-1 flex-wrap">
-                          {token.tags.slice(0, 2).map((tag, tagIndex) => (
-                            <Badge key={tagIndex} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                          {token.tags.length > 2 && (
-                            <Badge variant="secondary" className="text-xs">
-                              +{token.tags.length - 2}
-                            </Badge>
+                          {token.tags.length <= 2 ? (
+                            // 如果标签数量 <= 2，显示所有标签
+                            token.tags.map((tag, tagIndex) => (
+                              <Badge key={tagIndex} variant="secondary" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))
+                          ) : (
+                            // 如果标签数量 > 2，只显示第一个标签和数量
+                            <TooltipProvider>
+                              <Tooltip delayDuration={200}>
+                                <TooltipTrigger asChild>
+                                  <div className="flex gap-1 cursor-help">
+                                    <Badge variant="secondary" className="text-xs">
+                                      {token.tags[0]}
+                                    </Badge>
+                                    <Badge variant="secondary" className="text-xs">
+                                      +{token.tags.length - 1}
+                                    </Badge>
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent 
+                                  className="max-w-xs p-3 bg-popover border-border shadow-lg"
+                                  sideOffset={5}
+                                >
+                                  <div className="flex gap-1 flex-wrap">
+                                    {token.tags.map((tag, tagIndex) => (
+                                      <Badge key={tagIndex} variant="secondary" className="text-xs">
+                                        {tag}
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                           )}
                         </div>
                       </td>
