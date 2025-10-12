@@ -1095,7 +1095,7 @@ function TokenTableRow({
       <td className="p-3 text-right">
         <div className={`flex items-center justify-end gap-1 ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
           <span className="font-medium text-sm">
-            {isPositive ? '+' : ''}{formatPercent(priceChange)}
+            {formatPercent(priceChange)}
           </span>
         </div>
       </td>
