@@ -1,6 +1,9 @@
+// Duration 类型定义
+export type Duration = "3m" | "15m" | "30m" | "1h" | "2h" | "4h" | "12h" | "1d";
+
 // 价格百分比变化数据
 export interface PricePercentage {
-  period: number;
+  period: Duration;
   price: number;
   percentage: number;
 }
@@ -12,7 +15,7 @@ export interface PriceData {
   baseSymbol: string;
   price: number;
   time: number; // Unix 时间戳
-  percentages: Record<string, PricePercentage>;
+  percentages: Record<Duration, PricePercentage>;
 }
 
 // 代币元数据

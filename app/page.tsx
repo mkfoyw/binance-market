@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrendingUp, TrendingDown, Activity, Clock, RefreshCw, MoreHorizontal, ExternalLink, Loader2 } from "lucide-react";
 import { useGetPricesBySourceQuery } from "@/lib/services/crypto-price-tracker";
-import { PriceDataDetail, TokenMetadata } from "@/lib/types/crypto";
+import { PriceDataDetail, TokenMetadata, Duration } from "@/lib/types/crypto";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
 
@@ -220,14 +220,14 @@ function HoverPopoverMenu({ item }: { item: RankingItem }) {
 // 时间段配置
 const TIME_PERIODS = {
   "all": { label: "全部", description: "所有时间段排行榜", minutes: 0 },
-  "180": { label: "3分钟", description: "3分钟内变化", minutes: 3 },
-  "900": { label: "15分钟", description: "15分钟内变化", minutes: 15 },
-  "1800": { label: "30分钟", description: "30分钟内变化", minutes: 30 },
-  "3600": { label: "1小时", description: "1小时内变化", minutes: 60 },
-  "7200": { label: "2小时", description: "2小时内变化", minutes: 120 },
-  "14400": { label: "4小时", description: "4小时内变化", minutes: 240 },
-  "43200": { label: "12小时", description: "12小时内变化", minutes: 720 },
-  "86400": { label: "24小时", description: "24小时内变化", minutes: 1440 },
+  "3m": { label: "3分钟", description: "3分钟内变化", minutes: 3 },
+  "15m": { label: "15分钟", description: "15分钟内变化", minutes: 15 },
+  "30m": { label: "30分钟", description: "30分钟内变化", minutes: 30 },
+  "1h": { label: "1小时", description: "1小时内变化", minutes: 60 },
+  "2h": { label: "2小时", description: "2小时内变化", minutes: 120 },
+  "4h": { label: "4小时", description: "4小时内变化", minutes: 240 },
+  "12h": { label: "12小时", description: "12小时内变化", minutes: 720 },
+  "1d": { label: "24小时", description: "24小时内变化", minutes: 1440 },
 } as const;
 
 type TimePeriodKey = keyof typeof TIME_PERIODS;
@@ -242,7 +242,7 @@ interface RankingItem {
   percentage: number;
   previousPrice: number;
   time: number;
-  allPercentages: Record<string, { percentage: number; price: number }>; // 所有时间段的百分比数据
+  allPercentages: Record<Duration, { percentage: number; price: number }>; // 所有时间段的百分比数据
   circulatingSupply?: number; // 流通供应量
   marketCap?: number; // 流通市值
   maxSupply?: number; // 最大供应量
@@ -386,7 +386,7 @@ function RankingCard({
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                           {Object.entries(TIME_PERIODS).map(([periodKey, periodConfig]) => {
-                            const periodData = item.allPercentages[periodKey];
+                            const periodData = item.allPercentages[periodKey as Duration];
                             if (!periodData) return null;
                             
                             return (
@@ -627,7 +627,7 @@ export default function BinanceAnalysisPage() {
 
       binancePrices.data.forEach(priceDetail => {
         const { priceData, tokenMetadata } = priceDetail;
-        const periodData = priceData.percentages[period];
+        const periodData = priceData.percentages[period as Duration];
 
         if (periodData) {
           // 计算流通市值和完全稀释估值

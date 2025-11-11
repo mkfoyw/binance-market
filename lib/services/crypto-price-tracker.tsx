@@ -5,6 +5,8 @@ import { BinanceAlphaResponse } from "../types/binance-alpha";
 // 使用 Cloudflare Tunnel 提供的 HTTPS 地址
 const API_BASE_URL = "https://researchers-cologne-develop-figure.trycloudflare.com/api/v1";
 
+//const API_BASE_URL= "http://localhost:18080/api/v1";
+
 export const cryptoPriceTrackerApi = createApi({
   reducerPath: "cryptoPriceTrackerApi",
   baseQuery: fetchBaseQuery({

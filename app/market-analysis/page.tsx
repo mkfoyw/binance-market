@@ -33,6 +33,8 @@ import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
 import { DEFAULT_TAGS } from "@/lib/types/crypto";
 
+import { Duration } from "@/lib/types/crypto";
+
 interface TokenAnalysisData {
   id: string;
   symbol: string;
@@ -40,7 +42,7 @@ interface TokenAnalysisData {
   quoteSymbol: string;
   source: string;
   price: number;
-  percentages: Record<string, { percentage: number; price: number }>;
+  percentages: Record<Duration, { percentage: number; price: number }>;
   updateTime: number;
   tags: string[];
   category?: string;
@@ -53,7 +55,7 @@ interface TokenAnalysisData {
   circulatingSupply?: number; // 流通供应量
 }
 
-type SortField = 'symbol' | 'price' | 'fdv' | 'marketCap' | 'percentage_180' | 'percentage_900' | 'percentage_1800' | 'percentage_3600' | 'percentage_14400' | 'percentage_43200' | 'percentage_86400' | 'none';
+type SortField = 'symbol' | 'price' | 'fdv' | 'marketCap' | 'percentage_3m' | 'percentage_15m' | 'percentage_30m' | 'percentage_1h' | 'percentage_4h' | 'percentage_12h' | 'percentage_1d' | 'none';
 type SortDirection = 'asc' | 'desc';
 
 // 工具函数
@@ -417,33 +419,33 @@ export default function MarketAnalysisPage() {
             valueA = a.marketCap || 0;
             valueB = b.marketCap || 0;
             break;
-          case 'percentage_180':
-            valueA = a.percentages["180"]?.percentage || 0;
-            valueB = b.percentages["180"]?.percentage || 0;
+          case 'percentage_3m':
+            valueA = a.percentages["3m"]?.percentage || 0;
+            valueB = b.percentages["3m"]?.percentage || 0;
             break;
-          case 'percentage_900':
-            valueA = a.percentages["900"]?.percentage || 0;
-            valueB = b.percentages["900"]?.percentage || 0;
+          case 'percentage_15m':
+            valueA = a.percentages["15m"]?.percentage || 0;
+            valueB = b.percentages["15m"]?.percentage || 0;
             break;
-          case 'percentage_1800':
-            valueA = a.percentages["1800"]?.percentage || 0;
-            valueB = b.percentages["1800"]?.percentage || 0;
+          case 'percentage_30m':
+            valueA = a.percentages["30m"]?.percentage || 0;
+            valueB = b.percentages["30m"]?.percentage || 0;
             break;
-          case 'percentage_3600':
-            valueA = a.percentages["3600"]?.percentage || 0;
-            valueB = b.percentages["3600"]?.percentage || 0;
+          case 'percentage_1h':
+            valueA = a.percentages["1h"]?.percentage || 0;
+            valueB = b.percentages["1h"]?.percentage || 0;
             break;
-          case 'percentage_14400':
-            valueA = a.percentages["14400"]?.percentage || 0;
-            valueB = b.percentages["14400"]?.percentage || 0;
+          case 'percentage_4h':
+            valueA = a.percentages["4h"]?.percentage || 0;
+            valueB = b.percentages["4h"]?.percentage || 0;
             break;
-          case 'percentage_43200':
-            valueA = a.percentages["43200"]?.percentage || 0;
-            valueB = b.percentages["43200"]?.percentage || 0;
+          case 'percentage_12h':
+            valueA = a.percentages["12h"]?.percentage || 0;
+            valueB = b.percentages["12h"]?.percentage || 0;
             break;
-          case 'percentage_86400':
-            valueA = a.percentages["86400"]?.percentage || 0;
-            valueB = b.percentages["86400"]?.percentage || 0;
+          case 'percentage_1d':
+            valueA = a.percentages["1d"]?.percentage || 0;
+            valueB = b.percentages["1d"]?.percentage || 0;
             break;
           default:
             return 0;
@@ -511,7 +513,7 @@ export default function MarketAnalysisPage() {
   const stats = useMemo(() => {
     const totalTokens = filteredData.length;
     // 使用24小时数据作为主要统计指标
-    const mainPeriod = "86400";
+    const mainPeriod: Duration = "1d";
     const gainers = filteredData.filter(token => 
       (token.percentages[mainPeriod]?.percentage || 0) > 0
     ).length;
@@ -873,65 +875,65 @@ export default function MarketAnalysisPage() {
                   </th>
                   <th className="text-right p-3 font-medium">
                     <button 
-                      onClick={() => handleSort('percentage_180')}
+                      onClick={() => handleSort('percentage_3m')}
                       className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors"
                     >
                       3分钟
-                      {getSortIcon('percentage_180')}
+                      {getSortIcon('percentage_3m')}
                     </button>
                   </th>
                   <th className="text-right p-3 font-medium">
                     <button 
-                      onClick={() => handleSort('percentage_900')}
+                      onClick={() => handleSort('percentage_15m')}
                       className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors"
                     >
                       15分钟
-                      {getSortIcon('percentage_900')}
+                      {getSortIcon('percentage_15m')}
                     </button>
                   </th>
                   <th className="text-right p-3 font-medium">
                     <button 
-                      onClick={() => handleSort('percentage_1800')}
+                      onClick={() => handleSort('percentage_30m')}
                       className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors"
                     >
                       30分钟
-                      {getSortIcon('percentage_1800')}
+                      {getSortIcon('percentage_30m')}
                     </button>
                   </th>
                   <th className="text-right p-3 font-medium">
                     <button 
-                      onClick={() => handleSort('percentage_3600')}
+                      onClick={() => handleSort('percentage_1h')}
                       className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors"
                     >
                       1小时
-                      {getSortIcon('percentage_3600')}
+                      {getSortIcon('percentage_1h')}
                     </button>
                   </th>
                   <th className="text-right p-3 font-medium">
                     <button 
-                      onClick={() => handleSort('percentage_14400')}
+                      onClick={() => handleSort('percentage_4h')}
                       className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors"
                     >
                       4小时
-                      {getSortIcon('percentage_14400')}
+                      {getSortIcon('percentage_4h')}
                     </button>
                   </th>
                   <th className="text-right p-3 font-medium">
                     <button 
-                      onClick={() => handleSort('percentage_43200')}
+                      onClick={() => handleSort('percentage_12h')}
                       className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors"
                     >
                       12小时
-                      {getSortIcon('percentage_43200')}
+                      {getSortIcon('percentage_12h')}
                     </button>
                   </th>
                   <th className="text-right p-3 font-medium">
                     <button 
-                      onClick={() => handleSort('percentage_86400')}
+                      onClick={() => handleSort('percentage_1d')}
                       className="flex items-center gap-2 ml-auto hover:text-blue-600 transition-colors"
                     >
                       24小时
-                      {getSortIcon('percentage_86400')}
+                      {getSortIcon('percentage_1d')}
                     </button>
                   </th>
                   <th className="text-right p-3 font-medium">
@@ -959,7 +961,7 @@ export default function MarketAnalysisPage() {
               <tbody>
                 {filteredData.map((token, index) => {
                   // 获取各个时间段的涨跌幅
-                  const periods = ["180", "900", "1800", "3600", "14400", "43200", "86400"];
+                  const periods: Duration[] = ["3m", "15m", "30m", "1h", "4h", "12h", "1d"];
                   const percentages = periods.map(period => 
                     token.percentages[period]?.percentage || 0
                   );
