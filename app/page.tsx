@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TrendingUp, TrendingDown, Activity, Clock, RefreshCw, MoreHorizontal, ExternalLink, Loader2 } from "lucide-react";
+import { TrendingUp, TrendingDown, Activity, Clock, RefreshCw, MoreHorizontal, ExternalLink, Loader2, DollarSign } from "lucide-react";
 import { useGetPricesBySourceQuery } from "@/lib/services/crypto-price-tracker";
 import { PriceDataDetail, TokenMetadata, Duration } from "@/lib/types/crypto";
 import { format } from "date-fns";
@@ -585,6 +585,7 @@ function StatsCard({
 export default function BinanceAnalysisPage() {
   const [selectedPeriods, setSelectedPeriods] = useState<TimePeriodKey[]>(["all"]); // 支持多选时间段
   const [expandedPeriods, setExpandedPeriods] = useState<Record<string, boolean>>({}); // 每个时间段独立的展开状态
+  const [selectedMarketCapFilter, setSelectedMarketCapFilter] = useState<number>(0); // 0表示不筛选
   const { data: binancePrices, isLoading, error, refetch } = useGetPricesBySourceQuery("binance", {
     pollingInterval: 15000, // 每15秒自动刷新数据
   });
@@ -640,6 +641,13 @@ export default function BinanceAnalysisPage() {
             ? priceData.price * maxSupply
             : undefined;
 
+          // 流通市值筛选
+          if (selectedMarketCapFilter > 0) {
+            if (!marketCap || marketCap < selectedMarketCapFilter) {
+              return; // 跳过不满足市值条件的代币
+            }
+          }
+
           const item: RankingItem = {
             symbol: `${priceData.baseSymbol}${priceData.quoteSymbol}`,
             baseSymbol: priceData.baseSymbol,
@@ -676,7 +684,7 @@ export default function BinanceAnalysisPage() {
       isAllPeriods: selectedPeriods.includes("all"), 
       rankings: allPeriodRankings 
     };
-  }, [binancePrices, selectedPeriods]);
+  }, [binancePrices, selectedPeriods, selectedMarketCapFilter]);
 
   // 计算统计数据
   const stats = useMemo(() => {
@@ -812,29 +820,132 @@ export default function BinanceAnalysisPage() {
       <div className="space-y-4">
         {/* 时间周期筛选按钮 - 粘性定位 */}
   <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 -mx-4 px-4 border-b shadow-sm">
-          <div className="flex flex-wrap justify-center gap-2">
-            {Object.entries(TIME_PERIODS).map(([period, config]) => {
-              const isSelected = selectedPeriods.includes(period as TimePeriodKey);
-              return (
+          <div className="space-y-4">
+            {/* 时间周期筛选 */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                <span>时间周期</span>
+              </div>
+              <div className="flex flex-wrap justify-center gap-2">
+                {Object.entries(TIME_PERIODS).map(([period, config]) => {
+                  const isSelected = selectedPeriods.includes(period as TimePeriodKey);
+                  return (
+                    <Button
+                      key={period}
+                      variant={isSelected ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handlePeriodToggle(period as TimePeriodKey)}
+                      className={`transition-all ${
+                        isSelected
+                          ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                          : "hover:scale-105"
+                      }`}
+                    >
+                      <Clock className="h-3 w-3 mr-1" />
+                      {config.label}
+                      {period !== "all" && !selectedPeriods.includes("all") && isSelected && (
+                        <span className="ml-1 text-xs">✓</span>
+                      )}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 流通市值筛选 */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground">
+                <DollarSign className="h-4 w-4" />
+                <span>流通市值</span>
+              </div>
+              <div className="flex flex-wrap justify-center gap-2">
                 <Button
-                  key={period}
-                  variant={isSelected ? "default" : "outline"}
+                  variant={selectedMarketCapFilter === 0 ? "default" : "outline"}
                   size="sm"
-                  onClick={() => handlePeriodToggle(period as TimePeriodKey)}
+                  onClick={() => setSelectedMarketCapFilter(0)}
                   className={`transition-all ${
-                    isSelected
+                    selectedMarketCapFilter === 0 
                       ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
                       : "hover:scale-105"
                   }`}
                 >
-                  <Clock className="h-3 w-3 mr-1" />
-                  {config.label}
-                  {period !== "all" && !selectedPeriods.includes("all") && isSelected && (
-                    <span className="ml-1 text-xs">✓</span>
-                  )}
+                  不限
                 </Button>
-              );
-            })}
+                <Button
+                  variant={selectedMarketCapFilter === 5e7 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(5e7)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 5e7 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 5000万
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 1e8 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(1e8)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 1e8 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 1亿
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 2e8 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(2e8)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 2e8 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 2亿
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 3e8 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(3e8)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 3e8 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 3亿
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 5e8 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(5e8)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 5e8 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 5亿
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 1e9 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(1e9)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 1e9 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 10亿
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
         

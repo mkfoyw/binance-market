@@ -26,7 +26,8 @@ import {
   MoreHorizontal,
   ExternalLink,
   Loader2,
-  RotateCcw
+  RotateCcw,
+  DollarSign
 } from "lucide-react";
 import { useGetAllPricesQuery } from "@/lib/services/crypto-price-tracker";
 import { format } from "date-fns";
@@ -271,6 +272,7 @@ export default function MarketAnalysisPage() {
   const [selectedSource, setSelectedSource] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedMarketCapFilter, setSelectedMarketCapFilter] = useState<number>(0); // 0表示不筛选
   const [sortField, setSortField] = useState<SortField>('none');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   // 重置按钮动画状态
@@ -380,6 +382,13 @@ export default function MarketAnalysisPage() {
       );
     }
 
+    // 流通市值筛选
+    if (selectedMarketCapFilter > 0) {
+      filtered = filtered.filter(token => 
+        token.marketCap && token.marketCap >= selectedMarketCapFilter
+      );
+    }
+
     // 搜索筛选 - 对所有代币进行全局搜索（在其他筛选之后应用）
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -460,7 +469,7 @@ export default function MarketAnalysisPage() {
     }
 
     return filtered;
-  }, [processedData, searchQuery, selectedSource, selectedCategory, selectedTags, sortField, sortDirection]);
+  }, [processedData, searchQuery, selectedSource, selectedCategory, selectedTags, selectedMarketCapFilter, sortField, sortDirection]);
 
   // 处理列头点击排序
   const handleSort = (field: SortField) => {
@@ -824,6 +833,100 @@ export default function MarketAnalysisPage() {
                     {tag}
                   </Button>
                 ))}
+              </div>
+            </div>
+
+            {/* 流通市值筛选 */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium">流通市值</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  variant={selectedMarketCapFilter === 0 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(0)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 0 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  不限
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 5e7 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(5e7)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 5e7 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 5000万
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 1e8 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(1e8)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 1e8 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 1亿
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 2e8 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(2e8)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 2e8 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 2亿
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 3e8 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(3e8)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 3e8 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 3亿
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 5e8 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(5e8)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 5e8 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 5亿
+                </Button>
+                <Button
+                  variant={selectedMarketCapFilter === 1e9 ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedMarketCapFilter(1e9)}
+                  className={`transition-all ${
+                    selectedMarketCapFilter === 1e9 
+                      ? "bg-blue-500 hover:bg-blue-600 text-white shadow-md scale-105" 
+                      : "hover:scale-105"
+                  }`}
+                >
+                  &gt; 10亿
+                </Button>
               </div>
             </div>
           </div>
